@@ -1,4 +1,6 @@
-import { galleryRef } from '../refs';
+import { refs } from '../refs';
+
+const { galleryRef, loadMoreBtn } = refs;
 
 export function createMarkup(hits = []) {
   const markup = hits
@@ -12,7 +14,7 @@ export function createMarkup(hits = []) {
         comments,
         downloads,
       }) => {
-        return `<div class="photo-card">
+        return `<div class="photo-card card-set-item">
       <a class="photo-link" href="${largeImageURL}">
   <img src="${webformatURL}" alt="${tags}" loading="lazy" />
   <div class="info">
@@ -39,4 +41,9 @@ export function createMarkup(hits = []) {
 
 export function clearMarkup() {
   galleryRef.innerHTML = '';
+}
+
+export function hideSearchBtn() {
+  console.dir(loadMoreBtn);
+  loadMoreBtn.classList.toggle('is-hidden');
 }

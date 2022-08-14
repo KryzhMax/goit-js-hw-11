@@ -1,32 +1,37 @@
 import { refs } from './refs';
-import { createMarkup, clearMarkup } from './markup';
-import { fetchRequest, pageReset } from './request';
+import { createMarkup, clearMarkup, hideSearchBtn } from './markup';
+import { fetchRequest, pageReset, toLoadMore, incPage } from './request';
 import { onSuccess, onError, onEnd } from './helpers';
+import SimpleLightbox from 'simplelightbox';
 
-const { formRef, btnRef, galleryRef } = refs;
-// fetchRequest()
-//   .then(response => console.log(response))
-//   .catch(error => console.log(error));
+const { formRef, btnRef, galleryRef, loadMoreBtn } = refs;
+
+const lightbox = new SimpleLightbox('.gallery a', {
+  captionDelay: '250',
+  captionsData: 'alt',
+  showCounter: false,
+});
 
 export async function onSubmit(event) {
   event.preventDefault();
-  //   clearMarkup();
-  galleryRef.innerHTML = '';
+
+  clearMarkup();
+
   const value = event.target.elements.searchQuery.value.trim();
+
+  if (!value) return;
+
   if (value === '') {
     return onError();
   }
 
-  if (!value) return;
-
   pageReset();
 
-  try {
-    const response = await fetchRequest(value);
-    createMarkup();
-  } catch (error) {
-    console.log(error);
-  }
+  const response = await fetchRequest(value);
+  createMarkup(response.data.hits);
+
   //   console.dir(event.target.elements.searchQuery.value);
 }
 formRef.addEventListener('submit', onSubmit);
+btnRef.addEventListener('click', hideSearchBtn);
+loadMoreBtn.addEventListener('click', toLoadMore);
