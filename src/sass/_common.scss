@@ -109,6 +109,7 @@ img:hover {
   font-weight: 500;
   line-height: 1.62;
   cursor: pointer;
+  display: flex;
 
   padding: 6px 22px;
   text-align: center;
@@ -122,7 +123,7 @@ img:hover {
 }
 
 .load-more {
-  margin-top: 20px;
+  margin: 20px auto;
 }
 
 .button:hover,

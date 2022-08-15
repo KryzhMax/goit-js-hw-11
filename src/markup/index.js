@@ -44,6 +44,6 @@ export function clearMarkup() {
 }
 
 export function hideSearchBtn() {
-  console.dir(loadMoreBtn);
+  // console.dir(loadMoreBtn);
   loadMoreBtn.classList.toggle('is-hidden');
 }

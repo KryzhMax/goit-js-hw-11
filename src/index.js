@@ -3,6 +3,8 @@ import { createMarkup, clearMarkup, hideSearchBtn } from './markup';
 import { fetchRequest, pageReset, toLoadMore, incPage } from './request';
 import { onSuccess, onError, onEnd } from './helpers';
 import SimpleLightbox from 'simplelightbox';
+import 'simplelightbox/dist/simple-lightbox.min.css';
+import { PAGE } from './service';
 
 const { formRef, btnRef, galleryRef, loadMoreBtn } = refs;
 
@@ -25,7 +27,7 @@ export async function onSubmit(event) {
     return onError();
   }
 
-  pageReset();
+  PAGE.value = 1;
 
   const response = await fetchRequest(value);
   createMarkup(response.data.hits);

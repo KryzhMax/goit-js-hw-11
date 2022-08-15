@@ -5,9 +5,11 @@ const { formRef, loadMoreBtn } = refs;
 import { onEnd } from '../helpers';
 import { createMarkup } from '../markup';
 
+let value = '';
+
 export async function fetchRequest(request) {
   try {
-    const url = `${BASE_URL}?key=${KEY}&q=${request}&${QUERY_PARAMS}&${PAGE}`;
+    const url = `${BASE_URL}?key=${KEY}&q=${request}&${QUERY_PARAMS}&page=${PAGE.value}`;
     const response = await axios.get(url);
     // console.log(response);
     return response;
@@ -16,19 +18,20 @@ export async function fetchRequest(request) {
   }
 }
 
-export function pageReset() {
-  return (PAGE = 1);
-}
+// export function pageReset() {
+//   return (PAGE = 1);
+// }
 
-export function incPage() {
-  return (PAGE += 1);
-}
+// export function incPage() {
+//   return (PAGE += 1);
+// }
 
 export async function toLoadMore(event) {
-  incPage();
-
+  PAGE.value += 1;
   const response = await fetchRequest(formRef[0].value);
-  debugger;
+  // const response = await fetchRequest(value);
+  console.log(response);
+  // debugger;
   createMarkup(response.data.hits);
 
   if (PAGE >= Math.floor(response.data.totalHits / 40)) {
