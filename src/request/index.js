@@ -27,8 +27,12 @@ export async function toLoadMore(event) {
   if (response.data.hits.length < 40) {
     loadMoreBtn.disabled = true;
     createMarkup(response.data.hits);
+    if (galleryRef.children.length === response.data.totalHits) {
+      loadMoreBtn.disabled = true;
+      lightbox.refresh();
+      return onEnd();
+    }
     lightbox.refresh();
     return onEnd();
   }
-  createMarkup(response.data.hits);
 }

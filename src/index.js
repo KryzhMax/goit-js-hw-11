@@ -27,7 +27,7 @@ export async function onSubmit(event) {
     loadMoreBtn.disabled = true;
     createMarkup(response.data.hits);
     if (galleryRef.children.length === response.data.totalHits) {
-      loadMoreBtn.disabled = false;
+      loadMoreBtn.disabled = true;
       lightbox.refresh();
       return onEnd();
     }
@@ -41,8 +41,6 @@ export async function onSubmit(event) {
   }
 
   PAGE.value = 1;
-
-  // createMarkup(response.data.hits);
 
   //   console.dir(event.target.elements.searchQuery.value);
 }
