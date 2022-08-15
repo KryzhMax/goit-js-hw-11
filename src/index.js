@@ -8,7 +8,7 @@ import { PAGE } from './service';
 
 const { formRef, btnRef, galleryRef, loadMoreBtn } = refs;
 
-loadMoreBtn.style.display = 'none';
+loadMoreBtn.disabled = true;
 
 export async function onSubmit(event) {
   event.preventDefault();
@@ -21,23 +21,28 @@ export async function onSubmit(event) {
 
   const response = await fetchRequest(value);
   if (response.data.hits.length === 0) {
-    loadMoreBtn.style.display = 'none';
+    loadMoreBtn.disabled = true;
     return onError();
   } else if (response.data.hits.length < 40) {
-    loadMoreBtn.style.display = 'none';
+    loadMoreBtn.disabled = true;
     createMarkup(response.data.hits);
+    if (galleryRef.children.length === response.data.totalHits) {
+      loadMoreBtn.disabled = false;
+      lightbox.refresh();
+      return onEnd();
+    }
     lightbox.refresh();
     return onEnd();
   } else {
     createMarkup(response.data.hits);
-    loadMoreBtn.style.display = 'block';
+    loadMoreBtn.disabled = false;
     onSuccess(response.data.totalHits);
     lightbox.refresh();
   }
 
   PAGE.value = 1;
 
-  createMarkup(response.data.hits);
+  // createMarkup(response.data.hits);
 
   //   console.dir(event.target.elements.searchQuery.value);
 }

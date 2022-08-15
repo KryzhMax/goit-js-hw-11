@@ -2,7 +2,7 @@ const axios = require('axios');
 import { BASE_URL, KEY, QUERY_PARAMS, PAGE } from '../service';
 import { refs } from '../refs';
 const { formRef, loadMoreBtn } = refs;
-import { onEnd } from '../helpers';
+import { onEnd, onError } from '../helpers';
 import { createMarkup } from '../markup';
 import { lightbox } from '../';
 
@@ -25,7 +25,7 @@ export async function toLoadMore(event) {
   console.log('test 1111', response.data.hits.length);
 
   if (response.data.hits.length < 40) {
-    loadMoreBtn.style.display = 'none';
+    loadMoreBtn.disabled = true;
     createMarkup(response.data.hits);
     lightbox.refresh();
     return onEnd();
