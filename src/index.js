@@ -1,12 +1,12 @@
 import { refs } from './refs';
-import { createMarkup, clearMarkup } from './markup';
-import { fetchRequest, toLoadMore } from './request';
-import { onSuccess, onError } from './helpers';
+import { createMarkup, clearMarkup, hideSearchBtn } from './markup';
+import { fetchRequest, pageReset, toLoadMore, incPage } from './request';
+import { onSuccess, onError, onEnd } from './helpers';
 import SimpleLightbox from 'simplelightbox';
 import 'simplelightbox/dist/simple-lightbox.min.css';
 import { PAGE } from './service';
 
-const { formRef, loadMoreBtn } = refs;
+const { formRef, btnRef, galleryRef, loadMoreBtn } = refs;
 
 loadMoreBtn.style.display = 'none';
 
@@ -23,6 +23,11 @@ export async function onSubmit(event) {
   if (response.data.hits.length === 0) {
     loadMoreBtn.style.display = 'none';
     return onError();
+  } else if (response.data.hits.length < 40) {
+    loadMoreBtn.style.display = 'none';
+    createMarkup(response.data.hits);
+    lightbox.refresh();
+    return onEnd();
   } else {
     createMarkup(response.data.hits);
     loadMoreBtn.style.display = 'block';
@@ -31,7 +36,9 @@ export async function onSubmit(event) {
   }
 
   PAGE.value = 1;
+
   createMarkup(response.data.hits);
+
   //   console.dir(event.target.elements.searchQuery.value);
 }
 
