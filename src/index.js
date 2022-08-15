@@ -1,18 +1,14 @@
 import { refs } from './refs';
-import { createMarkup, clearMarkup, hideSearchBtn } from './markup';
-import { fetchRequest, pageReset, toLoadMore, incPage } from './request';
-import { onSuccess, onError, onEnd } from './helpers';
+import { createMarkup, clearMarkup } from './markup';
+import { fetchRequest, toLoadMore } from './request';
+import { onSuccess, onError } from './helpers';
 import SimpleLightbox from 'simplelightbox';
 import 'simplelightbox/dist/simple-lightbox.min.css';
 import { PAGE } from './service';
 
-const { formRef, btnRef, galleryRef, loadMoreBtn } = refs;
+const { formRef, loadMoreBtn } = refs;
 
-const lightbox = new SimpleLightbox('.gallery a', {
-  captionDelay: '250',
-  captionsData: 'alt',
-  showCounter: false,
-});
+loadMoreBtn.style.display = 'none';
 
 export async function onSubmit(event) {
   event.preventDefault();
@@ -23,17 +19,27 @@ export async function onSubmit(event) {
 
   if (!value) return;
 
-  if (value === '') {
+  const response = await fetchRequest(value);
+  if (response.data.hits.length === 0) {
+    loadMoreBtn.style.display = 'none';
     return onError();
+  } else {
+    createMarkup(response.data.hits);
+    loadMoreBtn.style.display = 'block';
+    onSuccess(response.data.totalHits);
+    lightbox.refresh();
   }
 
   PAGE.value = 1;
-
-  const response = await fetchRequest(value);
   createMarkup(response.data.hits);
-
   //   console.dir(event.target.elements.searchQuery.value);
 }
+
+export const lightbox = new SimpleLightbox('.gallery a', {
+  captionDelay: '250',
+  captionsData: 'alt',
+  showCounter: false,
+});
+
 formRef.addEventListener('submit', onSubmit);
-btnRef.addEventListener('click', hideSearchBtn);
 loadMoreBtn.addEventListener('click', toLoadMore);

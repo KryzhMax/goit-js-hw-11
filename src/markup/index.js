@@ -19,16 +19,16 @@ export function createMarkup(hits = []) {
   <img src="${webformatURL}" alt="${tags}" loading="lazy" />
   <div class="info">
     <p class="info-item">
-      <b>Likes: ${likes}</b>
+      <b>Likes:</b></br> ${likes}
     </p>
     <p class="info-item">
-      <b>Views: ${views}</b>
+      <b>Views:</b></br> ${views}
     </p>
     <p class="info-item">
-      <b>Comments: ${comments}</b>
+      <b>Comments:</b></br> ${comments}
     </p>
     <p class="info-item">
-      <b>Downloads: ${downloads}</b>
+      <b>Downloads:</b></br> ${downloads}
     </p>
   </div>
     </a>
@@ -41,9 +41,4 @@ export function createMarkup(hits = []) {
 
 export function clearMarkup() {
   galleryRef.innerHTML = '';
-}
-
-export function hideSearchBtn() {
-  // console.dir(loadMoreBtn);
-  loadMoreBtn.classList.toggle('is-hidden');
 }

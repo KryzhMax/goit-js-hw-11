@@ -4,6 +4,7 @@ import { refs } from '../refs';
 const { formRef, loadMoreBtn } = refs;
 import { onEnd } from '../helpers';
 import { createMarkup } from '../markup';
+import { lightbox } from '../';
 
 let value = '';
 
@@ -18,25 +19,16 @@ export async function fetchRequest(request) {
   }
 }
 
-// export function pageReset() {
-//   return (PAGE = 1);
-// }
-
-// export function incPage() {
-//   return (PAGE += 1);
-// }
-
 export async function toLoadMore(event) {
   PAGE.value += 1;
   const response = await fetchRequest(formRef[0].value);
-  // const response = await fetchRequest(value);
-  console.log(response);
-  // debugger;
-  createMarkup(response.data.hits);
+  console.log('test 1111', response.data.hits.length);
 
-  if (PAGE >= Math.floor(response.data.totalHits / 40)) {
-    console.dir(loadMoreBtn);
+  if (response.data.hits.length < 40) {
     loadMoreBtn.style.display = 'none';
-    onEnd();
+    createMarkup(response.data.hits);
+    lightbox.refresh();
+    return onEnd();
   }
+  createMarkup(response.data.hits);
 }
